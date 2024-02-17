@@ -1,6 +1,7 @@
 import os
 # choosing flask as lightweight framework to build API
 from flask import Flask
+from flask_cors import CORS
 
 def create_app(test_config = None):
 
@@ -29,5 +30,7 @@ def create_app(test_config = None):
     # init sqlite database
     from . import db
     db.init_app(app)
+
+    CORS(app)
 
     return app

@@ -51,9 +51,9 @@ export default function Page(){
             method: "POST",
             body: JSON.stringify(request),
             headers: {
+                'Accept': 'application/json',
                 "Content-Type": "application/json"
-            },
-            mode: "no-cors" // more security hacking to let this work in a local environment, not how we should do it in prod
+            }
         }).then((data) => {
             // We should do some after effects here like update the UI but I didn't get to it in time
             // Downside of how I organized this page is the data isn't in state. I would probably leverage a library like react-window
@@ -66,7 +66,7 @@ export default function Page(){
         <>
             <h1 className="text-3xl mb-1">Requests</h1>
             <div className="my-2">
-                <Link href="/requests?showAddRequestModal=1" className="bg-blue-700 text-white p-2 rounded border-none">Submit new request</Link>
+                <Link href="/requests?showAddRequestModal=1" className="bg-blue-700 text-white p-2 rounded border-none" onClick={() => setShowModal(true)}>Submit new request</Link>
             </div>
             { status !== 'fetched' ? <h2>Loading Requests...</h2>:
                 // I implement a custom data table, I'd explore libraries to do this better and support pagination/lazy loading easier for lots of data
