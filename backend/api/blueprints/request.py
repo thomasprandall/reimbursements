@@ -1,4 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 from .. import db
 # you might notice I'm not importing sqlalchemy or something similar here
 # Ultimately I wanted to keep this simple but an ORM would probably be a consideration otherwise
@@ -28,23 +31,28 @@ def get_requests():
     return jsonify(result_list)
 
 # API endpoint to add a request
-@request_bp.route('/request/add')
+@request_bp.route('/request/add', methods=['POST'])
 def add_request():
-    data = request.form
-    
+    data = request.data
+    # pp.pprint(data)
     cur = db.get_db().cursor()
     res = cur.execute(
-        "INSERT INTO request (amount, reason, trans_date, member_id) VALUES (?,?,?,?)", 
-        data.get('amount', type=float),
-        data.get('reason', type=str),
-        data.get('trans_date', type=str),
-        1 # hard-coding a member ID here
+        "INSERT INTO request (reason, amount, member_id, trans_date,account_number) VALUES (?,?,?,?,?)", 
+        (
+            data.get('reason', type=str),
+            data.get('amount', type=float),
+            1,
+            data.get('trans_date', type=str),
+            10025102
+        )
     )
 
-    res.commit()
+    # res.commit()
 
     db.close_db()
 
-    return True
+    return jsonify({'result': 'success'})
 
-# For these routes I really should be returning more helpful data to the API caller, I'm not doing it but at least I know I should?
+# For these routes I really should be returning more helpful response data to the API caller, I'm not doing it but at least I know I should?
+# I am also hard-coding some values in the /add endpoint because I'm not doing any auth layer anywhere but they would use the logged in user values
+# I left pprint in here as evidence of my debugging because I was checking the request.form instead of request.data
