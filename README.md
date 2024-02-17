@@ -18,5 +18,7 @@ Using terminal execute the following commands:
     npm i
     # Run Next app
     npm run dev
+    # Run Unit Tests
+    npm test
 
 Open the Dashboard at http://127.0.0.1:3000 (or whatever Address:Port your Next App generates)
